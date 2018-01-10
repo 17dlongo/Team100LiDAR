@@ -1,5 +1,5 @@
 ---
-title: "Lidar Data Variance visualized"
+title: "LiDAR Data Variance visualized"
 author: "Daniel Longo"
 date: "1/9/2018"
 output: html_document
@@ -8,21 +8,16 @@ output: html_document
 ```{r setup, include=FALSE}
 #knitr::opts_chunk$set(echo = TRUE)
 ```
-
-### R Markdown
+#### R Markdown
+#
+##### Azimuth is equivalent to angle
+##### Distance is in centimeters
+#
 
 ```{r include=FALSE, cache=FALSE}
 library(tidyverse)
-dat <- read.csv("/Users/DanielLongo/Desktop/lidar_cube_data/lidartest.csv", header = TRUE)
+dat <- read.csv("/Users/DanielLongo/Desktop/LiDAR/lidartest.csv", header = TRUE)
 ```
-
-```{r  results='hide', message=FALSE, warning=FALSE}
-dat %>% 
-  ggplot() +
-  geom_point(aes(y=DISTANCE,x=AZIMUTH, colour = SIGNAL_STRENGTH), size = 1,alpha = .8) 
-```
-
-##### Closer Up
 
 ```{r results='hide', message=FALSE, warning=FALSE}
 dat %>% 
@@ -31,4 +26,23 @@ dat %>%
   scale_y_continuous(limits = c(0, 500))
 ```
 
+##### Clustered Using K Means
+```{r  results='hide', message=FALSE, warning=FALSE}
+datCluster <- kmeans(dat[, 2:3],12) #12 CLusters using 2nd and 3rd columns
+datCluster$cluster <- as.factor(datCluster$cluster)
+dat %>% 
+  ggplot(aes(y=DISTANCE,x=AZIMUTH,color = datCluster$cluster,alpha=.2)) +
+  scale_y_continuous(limits = c(0, 500)) +
+  geom_point(show.legend=F)
+  
+  
+  
+```
+
+##### Further Away
+```{r  results='hide', message=FALSE, warning=FALSE}
+dat %>% 
+  ggplot() +
+  geom_point(aes(y=DISTANCE,x=AZIMUTH, colour = SIGNAL_STRENGTH), size = 1,alpha = .8) 
+```
 
