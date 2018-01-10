@@ -1,5 +1,5 @@
 ---
-title: "LiDAR Data Variance visualized"
+title: "LiDAR Data Variance Visualized"
 author: "Daniel Longo"
 date: "1/9/2018"
 output: html_document
